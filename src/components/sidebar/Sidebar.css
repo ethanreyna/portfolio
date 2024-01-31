@@ -1,0 +1,22 @@
+/* Sidebar.css */
+
+.Sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100%;
+    padding: 20px;
+  }
+  
+  .Sidebar div {
+    margin-top: 20px;
+  }
+  
+  .button {
+    color: wj;
+  }
+
+  .button:hover {
+    background-color: transparent;
+  }

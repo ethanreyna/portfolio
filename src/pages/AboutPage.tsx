@@ -1,15 +1,15 @@
 import Sidebar from '../sidebar/Sidebar';
 import './Page.css';
 
-const HomePage = () => (
+const AboutPage = () => (
   <div className="mainpage">
     <Sidebar/>
     <header className="mainpage-header">
       <p>
-        Ethan's Website
+        About page
       </p>
     </header>
   </div>
 );
 
-export default HomePage;
+export default AboutPage;

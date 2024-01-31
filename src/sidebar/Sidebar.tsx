@@ -1,13 +1,15 @@
-import './Sidebar.css'; 
+import './Sidebar.css';
 import SidebarButton from './SidebarButton';
 
-function Sidebar() {
+const Sidebar = () => {
   return (
     <div className="Sidebar">
-        <SidebarButton buttonLabel='about'/>
+      <SidebarButton buttonLabel="home" url="/" />
+      <SidebarButton buttonLabel="about" url="/about" />
     </div>
   );
 }
 
 export default Sidebar;
+
 

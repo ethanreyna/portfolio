@@ -4,22 +4,29 @@ import './Sidebar.css';
 
 interface SidebarButtonProps {
     buttonLabel: string;
-    url: string;
+    url?: string;
+    externalLink?: string;
 }
 
 
-const SidebarButton: React.FC<SidebarButtonProps> = ({buttonLabel, url}) => {
+const SidebarButton: React.FC<SidebarButtonProps> = ({buttonLabel, url, externalLink}) => {
     const navigate = useNavigate(); 
 
     const handleClick = () => {
-      navigate(url); 
+      if(externalLink){
+        window.open(externalLink, '_blank');
+      } else if (url){
+        navigate(url); 
+      }
     };
 
     return(
     <div className="SidebarButton">
-      <div>
-        <div className="text-black hover:cursor-pointer hover:bg-black rounded-full hover:text-white bg-white px-2 py-2" onClick={handleClick}>{buttonLabel}</div>
-      </div>
+    <div className="relative flex items-center">
+        <div className="px-4 py-2 text-black hover:cursor-pointer hover:bg-black hover:text-white bg-white rounded-full" onClick={handleClick}>
+          {buttonLabel}
+          </div>
+    </div>
     </div>
 
 )};

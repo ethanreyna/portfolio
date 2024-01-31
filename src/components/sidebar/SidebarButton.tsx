@@ -8,7 +8,6 @@ interface SidebarButtonProps {
     externalLink?: string;
 }
 
-
 const SidebarButton: React.FC<SidebarButtonProps> = ({buttonLabel, url, externalLink}) => {
     const navigate = useNavigate(); 
 

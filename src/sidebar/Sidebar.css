@@ -1,0 +1,17 @@
+/* Sidebar.css */
+
+.Sidebar {
+    position: fixed; /* Fix the position so it stays on the screen */
+    top: 0; /* Align to the top of the viewport */
+    left: 0; /* Align to the left side of the viewport */
+    width: 200px; /* Set the width of your sidebar */
+    height: 100%; /* Make it take the full height of the viewport */
+    background-color: #333; /* Background color for the sidebar */
+    padding: 20px; /* Add padding for the content inside the sidebar */
+    color: white; /* Text color */
+  }
+  
+  .Sidebar div {
+    margin-top: 20px; /* Add some space between the button and other content */
+  }
+  

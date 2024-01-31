@@ -1,17 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import AppRoutes from './AppRoutes';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Ethan's Website
-        </p>
-      </header>
-    </div>
-  );
-}
+const App = () => (
+  <AppRoutes/>
+);
 
 export default App;

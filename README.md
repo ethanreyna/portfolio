@@ -1,46 +1,39 @@
-# Getting Started with Create React App
+# ethanreyna.com
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Personal portfolio. Vite + React 19 + TypeScript + Tailwind CSS v4. A single static page with no router or backend.
 
-## Available Scripts
+## Develop
 
-In the project directory, you can run:
+```sh
+npm install
+npm run dev       # http://localhost:5173
+npm run build     # outputs dist/
+npm run preview   # serve the build locally
+```
 
-### `npm start`
+## Editing content
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+All copy, links, stats, jobs, projects, and screenshot captions live in
+[`src/data/content.ts`](src/data/content.ts). Components in `src/components/` only render that data.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Adding screenshots
 
-### `npm test`
+1. Put original images in `screenshots/<project>/`, e.g. `screenshots/strata/mail-designer.png`.
+   (This folder is git-ignored because originals are large.)
+2. Run `npm run images`. Each image becomes a resized WebP plus a `.thumb.webp` in `public/work/<project>/`.
+   To blur a region (names, emails, client data), add its pixel box to `REDACT` in
+   [`scripts/optimize-images.mjs`](scripts/optimize-images.mjs).
+3. Add entries to that feature's `shots` array in `content.ts`:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```ts
+   { src: "/work/strata/mail-designer.webp", alt: "…", caption: "…" }
+   ```
 
-### `npm run build`
+   Use `fit: "contain"` for images that aren't roughly 16:9 (tall pages, small menus).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+A feature with no shots shows as a compact card. Once it has shots, it switches to the full layout with a gallery and lightbox.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploy
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+`npm run build` produces a static site in `dist/` that works on any static host
+(Cloudflare Pages, Netlify, Vercel, GitHub Pages).

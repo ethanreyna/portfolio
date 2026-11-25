@@ -12,8 +12,16 @@ export const profile = {
   resume: "/Ethan-Reyna-Resume.pdf",
   greeting: "Hi, I'm Ethan",
   headline: "I build web apps and stuff.",
-  intro:
-    "I'm a frontend engineer, mostly working in TypeScript, React, and Next.js. I tend to end up on the harder pieces of a product, like canvas editors, long multi-step flows, and report generators, and I like working closely with design and product to get the details right.",
+  /** Intro paragraph. Wrap a phrase in {kw} or {str} to color it like code. */
+  intro: [
+    "I'm a ",
+    { kw: "frontend engineer" },
+    ", mostly working in ",
+    { str: "TypeScript, React, and Next.js" },
+    ". I tend to end up on the harder pieces of a product, like canvas editors, long multi-step flows, and report generators, and I like working closely with ",
+    { kw: "design and product" },
+    " to get the details right.",
+  ] as Array<string | { kw: string } | { str: string }>,
   currently: "Software engineer at Strata",
 };
 
@@ -47,7 +55,6 @@ export type CaseStudy = {
   role: string;
   period: string;
   blurb: string;
-  accent: string;
   features: Feature[];
 };
 
@@ -58,7 +65,6 @@ export const caseStudies: CaseStudy[] = [
     product: "Mailtech",
     role: "Software Engineer",
     period: "2025 to now",
-    accent: "var(--accent)",
     blurb:
       "Mailtech is software for running large direct mail campaigns. I work on big parts of its Next.js/React frontend, from campaign setup to the mail designer to audience ordering.",
     features: [
@@ -163,7 +169,6 @@ export const caseStudies: CaseStudy[] = [
     product: "Cyber risk platform",
     role: "Software Engineer",
     period: "2022 to 2024",
-    accent: "#5cc8b4",
     blurb:
       "Trava helps MSPs and businesses understand their cyber risk. I led feature work on its TypeScript/React web app, mostly reporting and client management.",
     features: [

@@ -1,3 +1,4 @@
+import Backdrop from "./components/Backdrop";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Work from "./components/Work";
@@ -22,15 +23,23 @@ export default function App() {
       >
         Skip to content
       </a>
-      <Nav />
-      <main id="main">
-        <Hero />
-        <Work />
-        <Experience />
-        <Skills />
-        <Contact />
-      </main>
-      <Footer />
+      <Backdrop />
+      <div className="mx-auto flex max-w-7xl justify-center gap-6 px-3 pt-16 pb-10 sm:px-6 sm:pt-20 lg:gap-8 lg:py-16">
+        <div className="min-w-0 w-full max-w-5xl">
+          <main
+            id="main"
+            className="space-y-20 rounded-2xl border border-line/70 bg-panel px-5 py-12 shadow-sm backdrop-blur-md sm:space-y-28 sm:px-10 sm:py-16"
+          >
+            <Hero />
+            <Work />
+            <Experience />
+            <Skills />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+        <Nav />
+      </div>
     </>
   );
 }

@@ -1,19 +1,6 @@
 import { caseStudies, type CaseStudy, type Feature } from "../data/content";
 import { Gallery } from "./Gallery";
-import { Icon, Reveal, Section, Tag } from "./ui";
-
-function Points({ points, accent }: { points: string[]; accent: string }) {
-  return (
-    <ul className="space-y-2.5">
-      {points.map((p) => (
-        <li key={p} className="flex gap-3 text-sm">
-          <span className="mt-2 size-1.5 shrink-0 rounded-full" style={{ background: accent }} />
-          <span className="text-pretty">{p}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
+import { Dashes, Icon, Reveal, Section, TechList } from "./ui";
 
 /** A feature with screenshots: copy on one side, gallery on the other. */
 function FeatureBlock({ feature, study, flip }: { feature: Feature; study: CaseStudy; flip: boolean }) {
@@ -21,14 +8,10 @@ function FeatureBlock({ feature, study, flip }: { feature: Feature; study: CaseS
     <Reveal className="grid items-start gap-8 lg:grid-cols-12 lg:gap-12">
       <div className={`lg:col-span-5 lg:pt-4 ${flip ? "lg:order-2" : ""}`}>
         <h4 className="text-xl font-semibold tracking-tight sm:text-2xl">{feature.title}</h4>
-        <p className="mt-3 text-pretty text-muted">{feature.summary}</p>
+        <p className="mt-3 leading-relaxed text-pretty text-fg/80">{feature.summary}</p>
+        <Dashes points={feature.points} className="mt-5 text-sm" />
         <div className="mt-5">
-          <Points points={feature.points} accent={study.accent} />
-        </div>
-        <div className="mt-6 flex flex-wrap gap-1.5">
-          {feature.tags.map((t) => (
-            <Tag key={t}>{t}</Tag>
-          ))}
+          <TechList items={feature.tags} />
         </div>
       </div>
       <div className={`min-w-0 lg:col-span-7 ${flip ? "lg:order-1" : ""}`}>
@@ -39,19 +22,15 @@ function FeatureBlock({ feature, study, flip }: { feature: Feature; study: CaseS
 }
 
 /** A feature without screenshots yet: a compact card. */
-function FeatureCard({ feature, study, index }: { feature: Feature; study: CaseStudy; index: number }) {
+function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
   return (
     <Reveal delay={(index % 2) * 80} className="h-full">
-      <div className="flex h-full flex-col rounded-2xl border border-line bg-raised/50 p-6">
+      <div className="flex h-full flex-col rounded-xl border border-line bg-bg/50 p-6">
         <h4 className="text-lg font-semibold tracking-tight">{feature.title}</h4>
-        <p className="mt-2 text-sm text-pretty text-muted">{feature.summary}</p>
-        <div className="mt-5 flex-1">
-          <Points points={feature.points} accent={study.accent} />
-        </div>
-        <div className="mt-6 flex flex-wrap gap-1.5">
-          {feature.tags.map((t) => (
-            <Tag key={t}>{t}</Tag>
-          ))}
+        <p className="mt-2 text-sm leading-relaxed text-pretty text-fg/80">{feature.summary}</p>
+        <Dashes points={feature.points} className="mt-5 flex-1 text-sm" />
+        <div className="mt-5">
+          <TechList items={feature.tags} />
         </div>
       </div>
     </Reveal>
@@ -64,27 +43,21 @@ function Study({ study }: { study: CaseStudy }) {
   return (
     <article id={study.id} className="scroll-mt-24">
       <Reveal>
-        <div className="relative overflow-hidden rounded-2xl border border-line bg-raised p-6 sm:p-8">
-          <div
-            className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full opacity-20 blur-3xl"
-            style={{ background: study.accent }}
-          />
-          <div className="relative flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-            <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {study.company}
-              <span className="text-muted"> / {study.product}</span>
-            </h3>
-            <p className="font-mono text-xs text-muted">
-              {study.role} · {study.period}
-            </p>
-          </div>
-          <p className="relative mt-4 max-w-3xl text-pretty text-muted">{study.blurb}</p>
-          {withShots.length === 0 && (
-            <p className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-line-strong px-3 py-1 text-xs text-faint">
-              <Icon.Image width={13} height={13} /> Screenshots coming soon
-            </p>
-          )}
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-line pb-5">
+          <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            {study.company}
+            <span className="font-display font-normal text-muted italic"> / {study.product}</span>
+          </h3>
+          <p className="font-mono text-sm text-faint">
+            {study.role} · {study.period}
+          </p>
         </div>
+        <p className="mt-5 max-w-3xl leading-relaxed text-pretty text-fg/80">{study.blurb}</p>
+        {withShots.length === 0 && (
+          <p className="mt-5 inline-flex items-center gap-2 font-mono text-xs text-cmt">
+            <Icon.Image width={13} height={13} /> // screenshots coming soon
+          </p>
+        )}
       </Reveal>
 
       {withShots.length > 0 && (
@@ -98,7 +71,7 @@ function Study({ study }: { study: CaseStudy }) {
       {withoutShots.length > 0 && (
         <div className={`mt-14 grid gap-4 sm:mt-16 ${withoutShots.length > 1 ? "md:grid-cols-2" : ""}`}>
           {withoutShots.map((f, i) => (
-            <FeatureCard key={f.title} feature={f} study={study} index={i} />
+            <FeatureCard key={f.title} feature={f} index={i} />
           ))}
         </div>
       )}
@@ -110,11 +83,11 @@ export default function Work() {
   return (
     <Section
       id="work"
-      eyebrow="Work"
+      eyebrow="work"
       title="Things I've built"
       intro="Most of this lives behind a login, so here's a tour with screenshots. Other people's names are blurred out."
     >
-      <div className="space-y-28 sm:space-y-36">
+      <div className="space-y-24 sm:space-y-32">
         {caseStudies.map((s) => (
           <Study key={s.id} study={s} />
         ))}

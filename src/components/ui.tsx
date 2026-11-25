@@ -47,22 +47,44 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+    <section id={id} className="scroll-mt-24">
       <Reveal>
-        <p className="font-mono text-xs tracking-widest text-accent uppercase">{eyebrow}</p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h2>
-        {intro && <p className="mt-4 max-w-2xl text-pretty text-muted">{intro}</p>}
+        <p className="font-mono text-sm text-cmt">// {eyebrow}</p>
+        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h2>
+        {intro && <p className="mt-4 max-w-2xl leading-relaxed text-pretty text-fg/80">{intro}</p>}
       </Reveal>
       <div className="mt-12">{children}</div>
     </section>
   );
 }
 
-export function Tag({ children }: { children: ReactNode }) {
+/** Tech names in keyword color, separated by dots. */
+export function TechList({ items }: { items: string[] }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-line bg-sunken px-2.5 py-0.5 font-mono text-[11px] text-muted">
-      {children}
-    </span>
+    <p className="font-mono text-sm text-faint">
+      {items.map((t, i) => (
+        <span key={t}>
+          <span className="text-kw">{t}</span>
+          {i < items.length - 1 && " · "}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+/** Bullet list with code-comment dashes. */
+export function Dashes({ points, className = "" }: { points: string[]; className?: string }) {
+  return (
+    <ul className={`space-y-2.5 leading-relaxed ${className}`}>
+      {points.map((p) => (
+        <li key={p} className="flex gap-2.5">
+          <span aria-hidden="true" className="font-mono text-cmt select-none">
+            -
+          </span>
+          <span className="text-pretty">{p}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -135,12 +157,12 @@ export function ButtonLink({
   const styles =
     variant === "primary"
       ? "border border-transparent bg-accent text-accent-fg hover:brightness-110"
-      : "border border-line-strong text-fg hover:border-fg/40 hover:bg-raised";
+      : "border border-line-strong bg-bg/40 text-fg hover:border-fg/40 hover:bg-raised";
   return (
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${styles}`}
+      className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${styles}`}
     >
       {children}
       {external && <span className="sr-only">(opens in a new tab)</span>}

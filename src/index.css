@@ -2,36 +2,56 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/jetbrains-mono";
 
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+
 @custom-variant light (&:where(.light, .light *));
 
-/* Color tokens. Dark is the default; .light on <html> swaps them. */
+/* Color tokens: warm stone with a teal accent, plus code-syntax colors.
+   Dark is the default; .light on <html> swaps them. */
 :root {
-  --bg: #09090b;
-  --bg-raised: #121116;
-  --bg-sunken: #060608;
-  --line: #24222b;
-  --line-strong: #36333f;
-  --fg: #ecedf0;
-  --fg-muted: #9a9fac;
-  --fg-faint: #858a99;
-  --accent: #a78bfa;
-  --accent-fg: #13072b;
-  --glow: rgb(139 92 246 / 0.2);
+  --bg: #1a1816;
+  --bg-raised: #292524;
+  --bg-sunken: #141210;
+  --line: #36312d;
+  --line-strong: #4a4541;
+  --fg: #fafaf9;
+  --fg-muted: #c4beb7;
+  --fg-faint: #a29b93;
+  --accent: #5eead4;
+  --accent-fg: #14110f;
+  --kw: #99f6e4;
+  --str: #fda4af;
+  --cmt: #b3aa9b;
+  --panel: rgb(26 24 22 / 0.72);
+  --dot: rgb(255 255 255 / 0.14);
+  --dot-fine: rgb(255 255 255 / 0.07);
+  --blob-a: rgb(45 212 191 / 0.24);
+  --blob-b: rgb(253 164 175 / 0.16);
+  --blob-c: rgb(45 212 191 / 0.09);
   color-scheme: dark;
 }
 
 :root.light {
-  --bg: #f7f7f9;
-  --bg-raised: #ffffff;
-  --bg-sunken: #eeedf2;
-  --line: #e4e2ea;
-  --line-strong: #cfccd8;
-  --fg: #16171b;
-  --fg-muted: #555a66;
-  --fg-faint: #646874;
-  --accent: #7c3aed;
-  --accent-fg: #ffffff;
-  --glow: rgb(124 58 237 / 0.12);
+  --bg: #f8f5f0;
+  --bg-raised: #f3ede4;
+  --bg-sunken: #efe9df;
+  --line: #e2d9cc;
+  --line-strong: #c9c0b4;
+  --fg: #14110f;
+  --fg-muted: #44403c;
+  --fg-faint: #5f5a54;
+  --accent: #0d6b63;
+  --accent-fg: #f8f5f0;
+  --kw: #0a5c55;
+  --str: #9f3a3a;
+  --cmt: #56644c;
+  --panel: rgb(248 245 240 / 0.74);
+  --dot: rgb(20 17 15 / 0.2);
+  --dot-fine: rgb(20 17 15 / 0.09);
+  --blob-a: rgb(15 118 110 / 0.3);
+  --blob-b: rgb(190 74 74 / 0.18);
+  --blob-c: rgb(15 118 110 / 0.1);
   color-scheme: light;
 }
 
@@ -46,8 +66,13 @@
   --color-faint: var(--fg-faint);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
+  --color-kw: var(--kw);
+  --color-str: var(--str);
+  --color-cmt: var(--cmt);
+  --color-panel: var(--panel);
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, Menlo, monospace;
+  --font-display: "Newsreader Variable", ui-serif, Georgia, serif;
 }
 
 html {
@@ -70,13 +95,35 @@ body {
   color: var(--accent-fg);
 }
 
-/* Faint grid behind the hero. */
-.grid-bg {
+/* Page backdrop: a two-size dot grid with soft color blobs drifting over it. */
+.dot-grid {
   background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+    radial-gradient(circle at center, var(--dot) 0 1.5px, transparent 1.5px),
+    radial-gradient(circle at center, var(--dot-fine) 0 1px, transparent 1px);
+  background-position: 0 0, 8px 8px;
+  background-size: 32px 32px, 16px 16px;
+}
+.blob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+/* Blinking block cursor after the hero name. */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.9em;
+  margin-left: 0.08em;
+  vertical-align: -0.05em;
+  background: var(--accent);
+  animation: blink 1.1s steps(1, end) infinite;
 }
 
 /* Scroll reveal */
@@ -92,6 +139,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .cursor { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
@@ -116,7 +164,7 @@ dialog::backdrop {
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .reveal { opacity: 1; transform: none; }
   header { position: static; }
-  .grid-bg, dialog { display: none; }
+  .backdrop, dialog, .side-nav { display: none !important; }
 }
 
 .no-scrollbar { scrollbar-width: none; }

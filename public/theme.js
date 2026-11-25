@@ -4,6 +4,6 @@ try {
   var t = localStorage.getItem("theme");
   if (t === "light" || (!t && matchMedia("(prefers-color-scheme: light)").matches)) {
     document.documentElement.classList.add("light");
-    document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f7f7f9");
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f8f5f0");
   }
 } catch (e) {}

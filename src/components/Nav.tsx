@@ -3,12 +3,14 @@ import { profile } from "../data/content";
 import { Icon } from "./ui";
 
 const links = [
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
+  { href: "#top", label: "ethan" },
+  { href: "#work", label: "work" },
+  { href: "#experience", label: "experience" },
+  { href: "#skills", label: "skills" },
+  { href: "#contact", label: "contact" },
 ];
 
-const THEME_COLOR = { light: "#f7f7f9", dark: "#09090b" };
+const THEME_COLOR = { light: "#f8f5f0", dark: "#1a1816" };
 
 function storedTheme() {
   try {
@@ -54,19 +56,17 @@ function useTheme() {
   return [light, toggle] as const;
 }
 
-/** Tracks scroll state: whether the page has moved, and which nav section is in view. */
+/** Tracks which nav section is in view. */
 function useScrollSpy() {
-  const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState(links[0].href);
 
   useEffect(() => {
     let frame = 0;
     const update = () => {
       frame = 0;
-      setScrolled(window.scrollY > 8);
       const doc = document.documentElement;
       const atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - 4;
-      let current = "";
+      let current = links[0].href;
       if (atBottom && window.scrollY > 0) {
         current = links[links.length - 1].href;
       } else {
@@ -90,64 +90,58 @@ function useScrollSpy() {
     };
   }, []);
 
-  return { scrolled, active };
+  return active;
 }
 
 export default function Nav() {
   const [light, toggle] = useTheme();
-  const { scrolled, active } = useScrollSpy();
+  const active = useScrollSpy();
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300 ${
-        scrolled ? "border-line bg-bg/80 backdrop-blur-lg" : "border-transparent"
-      }`}
+    <nav
+      aria-label="Main"
+      className="side-nav fixed inset-x-3 top-3 z-40 flex items-center justify-between gap-1 rounded-xl border border-line/70 bg-panel px-2 py-1.5 font-mono text-xs shadow-sm backdrop-blur-md sm:inset-x-auto sm:right-4 sm:top-4 lg:sticky lg:top-8 lg:right-auto lg:w-40 lg:shrink-0 lg:flex-col lg:items-start lg:self-start lg:border-0 lg:bg-transparent lg:p-0 lg:text-sm lg:shadow-none lg:backdrop-blur-none"
     >
-      <nav aria-label="Main" className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href="#top" className="flex items-center gap-2.5 rounded-lg font-medium">
-          <span
-            aria-hidden="true"
-            className="grid size-8 place-items-center rounded-lg bg-accent font-mono text-sm font-bold text-accent-fg"
-          >
-            er
-          </span>
-          <span className="sr-only sm:not-sr-only">{profile.name}</span>
+      <ul className="flex items-center gap-0.5 lg:flex-col lg:items-start lg:gap-1.5">
+        {links.map((l, i) => {
+          const on = active === l.href;
+          return (
+            <li key={l.href} className={i === 0 ? "hidden lg:block" : undefined}>
+              <a
+                href={l.href}
+                aria-current={on ? "location" : undefined}
+                className={`flex items-center rounded-md px-1.5 py-1 transition-colors lg:px-0 ${
+                  on ? "text-accent" : "text-muted hover:text-fg"
+                }`}
+              >
+                <span aria-hidden="true" className={`hidden w-4 lg:inline ${on ? "" : "opacity-0"}`}>
+                  &gt;
+                </span>
+                {l.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="flex items-center gap-1 lg:mt-5 lg:flex-col lg:items-start lg:gap-2">
+        <a
+          href={profile.resume}
+          target="_blank"
+          rel="noreferrer"
+          className="hidden items-center gap-1 rounded-md py-1 text-muted transition-colors hover:text-fg lg:inline-flex lg:pl-4"
+        >
+          resume.pdf <Icon.ArrowUpRight width={13} height={13} />
+          <span className="sr-only">(opens in a new tab)</span>
         </a>
-        <div className="flex items-center gap-1">
-          <ul className="hidden items-center gap-1 md:flex">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  aria-current={active === l.href ? "location" : undefined}
-                  className={`rounded-full px-3 py-1.5 text-sm transition ${
-                    active === l.href ? "bg-raised text-fg" : "text-muted hover:text-fg"
-                  }`}
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <button
-            type="button"
-            onClick={toggle}
-            className="grid size-9 place-items-center rounded-full text-muted transition hover:bg-raised hover:text-fg"
-            aria-label={light ? "Switch to dark theme" : "Switch to light theme"}
-          >
-            {light ? <Icon.Moon /> : <Icon.Sun />}
-          </button>
-          <a
-            href={profile.resume}
-            target="_blank"
-            rel="noreferrer"
-            className="ml-1 inline-flex items-center gap-1.5 rounded-full border border-line-strong px-3.5 py-1.5 text-sm transition hover:bg-raised"
-          >
-            Resume <Icon.ArrowUpRight width={14} height={14} />
-            <span className="sr-only">(PDF, opens in a new tab)</span>
-          </a>
-        </div>
-      </nav>
-    </header>
+        <button
+          type="button"
+          onClick={toggle}
+          className="grid size-8 place-items-center rounded-md text-muted transition hover:bg-raised hover:text-fg lg:ml-2.5"
+          aria-label={light ? "Switch to dark theme" : "Switch to light theme"}
+        >
+          {light ? <Icon.Moon width={16} height={16} /> : <Icon.Sun width={16} height={16} />}
+        </button>
+      </div>
+    </nav>
   );
 }
